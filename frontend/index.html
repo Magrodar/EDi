@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate EDI — Command Console</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">EDI</span>
+      <span class="brand-sub">Core Console</span>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-tab="brief">Daily Brief</button>
+      <button class="nav-item" data-tab="debrief">Debrief</button>
+      <button class="nav-item" data-tab="commitments">Commitments</button>
+      <button class="nav-item" data-tab="decisions">Decisions</button>
+      <button class="nav-item" data-tab="risks">Risks</button>
+      <button class="nav-item" data-tab="alerts">Alerts</button>
+      <button class="nav-item" data-tab="search">Memory Search</button>
+    </nav>
+    <button class="settings-toggle" id="settingsToggle">⚙ Connection</button>
+  </aside>
+
+  <main class="content">
+    <div id="settingsPanel" class="panel settings-panel hidden">
+      <h2>Connection</h2>
+      <label>API base URL</label>
+      <input id="apiBase" type="text" placeholder="http://localhost:8000">
+      <label>API key</label>
+      <input id="apiKey" type="password" placeholder="X-API-Key">
+      <button id="saveSettings" class="btn primary">Save</button>
+      <p class="hint">Stored only in this browser's local storage.</p>
+    </div>
+
+    <section id="tab-brief" class="tab panel">
+      <div class="panel-header">
+        <h2>Daily Commander Brief</h2>
+        <button id="refreshBrief" class="btn">Refresh</button>
+      </div>
+      <div id="briefContent"></div>
+    </section>
+
+    <section id="tab-debrief" class="tab panel hidden">
+      <h2>Debrief</h2>
+      <p class="hint">Typed push-to-talk debrief. EDI extracts facts, commitments and risks and runs the what-am-I-missing scan.</p>
+      <textarea id="debriefText" rows="6" placeholder="I'll send the RM-X purchase order by tomorrow. There is a risk that RM-X may miss the weekly plan..."></textarea>
+      <button id="submitDebrief" class="btn primary">Submit debrief</button>
+      <div id="debriefResult"></div>
+    </section>
+
+    <section id="tab-commitments" class="tab panel hidden">
+      <div class="panel-header">
+        <h2>Commitments</h2>
+        <button id="refreshCommitments" class="btn">Refresh</button>
+      </div>
+      <div class="quick-add">
+        <input id="newCommitmentTitle" type="text" placeholder="New commitment title">
+        <input id="newCommitmentDue" type="datetime-local">
+        <button id="addCommitment" class="btn primary">Add</button>
+      </div>
+      <div id="commitmentsList" class="list"></div>
+    </section>
+
+    <section id="tab-decisions" class="tab panel hidden">
+      <div class="panel-header">
+        <h2>Decisions</h2>
+        <button id="refreshDecisions" class="btn">Refresh</button>
+      </div>
+      <div class="quick-add">
+        <input id="newDecisionQuestion" type="text" placeholder="Decision question">
+        <button id="addDecision" class="btn primary">Add</button>
+      </div>
+      <div id="decisionsList" class="list"></div>
+    </section>
+
+    <section id="tab-risks" class="tab panel hidden">
+      <div class="panel-header">
+        <h2>Risks</h2>
+        <button id="refreshRisks" class="btn">Refresh</button>
+      </div>
+      <div class="quick-add">
+        <input id="newRiskTitle" type="text" placeholder="Risk title">
+        <input id="newRiskProbability" type="number" min="0" max="1" step="0.05" placeholder="Prob. (0-1)">
+        <input id="newRiskImpact" type="number" min="0" max="1" step="0.05" placeholder="Impact (0-1)">
+        <button id="addRisk" class="btn primary">Add</button>
+      </div>
+      <div id="risksList" class="list"></div>
+    </section>
+
+    <section id="tab-alerts" class="tab panel hidden">
+      <div class="panel-header">
+        <h2>Alerts</h2>
+        <div>
+          <button id="runScan" class="btn primary">Run "what am I missing?" scan</button>
+          <button id="refreshAlerts" class="btn">Refresh</button>
+        </div>
+      </div>
+      <div id="alertsList" class="list"></div>
+    </section>
+
+    <section id="tab-search" class="tab panel hidden">
+      <h2>Memory Search</h2>
+      <div class="quick-add">
+        <input id="searchQuery" type="text" placeholder="Search facts (e.g. RM-X)">
+        <button id="runSearch" class="btn primary">Search</button>
+      </div>
+      <div id="searchResults" class="list"></div>
+    </section>
+  </main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
