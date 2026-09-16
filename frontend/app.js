@@ -134,8 +134,72 @@ async function loadBrief() {
 }
 el("refreshBrief").addEventListener("click", loadBrief);
 
+// ---------- Voice capture (push-to-talk) ----------
+// Uses the browser's own on-device/OS speech recognition (Chrome on Android supports this
+// natively) -- nothing is recorded or sent anywhere before the mic is tapped on, and it stops
+// the instant it's tapped off. No ambient/background listening, ever.
+const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognizer = null;
+let isListening = false;
+let baseTextBeforeListening = "";
+
+if (SpeechRecognitionCtor) {
+  recognizer = new SpeechRecognitionCtor();
+  recognizer.continuous = true;
+  recognizer.interimResults = true;
+  recognizer.lang = "en-US";
+
+  recognizer.onresult = (event) => {
+    let transcript = "";
+    for (let i = 0; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript;
+    }
+    const textarea = el("debriefText");
+    const sep = baseTextBeforeListening && !baseTextBeforeListening.endsWith(" ") ? " " : "";
+    textarea.value = baseTextBeforeListening + sep + transcript;
+  };
+
+  recognizer.onerror = (event) => {
+    showError("debriefResult", new Error(`Voice input error: ${event.error}`));
+    stopListening();
+  };
+
+  recognizer.onend = () => stopListening();
+} else {
+  el("micButton").title = "Voice input isn't supported in this browser — type your debrief instead.";
+  el("micButton").disabled = true;
+}
+
+function startListening() {
+  if (!recognizer || isListening) return;
+  baseTextBeforeListening = el("debriefText").value;
+  isListening = true;
+  el("micButton").classList.add("recording");
+  el("micStatus").classList.remove("hidden");
+  try {
+    recognizer.start();
+  } catch (err) {
+    showError("debriefResult", new Error(`Couldn't start voice input: ${err.message || err}`));
+    stopListening();
+  }
+}
+
+function stopListening() {
+  if (!isListening) return;
+  isListening = false;
+  el("micButton").classList.remove("recording");
+  el("micStatus").classList.add("hidden");
+  try { recognizer.stop(); } catch (_) { /* already stopped */ }
+}
+
+el("micButton").addEventListener("click", () => {
+  if (isListening) stopListening();
+  else startListening();
+});
+
 // ---------- Debrief ----------
 el("submitDebrief").addEventListener("click", async () => {
+  stopListening();
   const text = el("debriefText").value.trim();
   if (!text) return;
   const resultEl = el("debriefResult");

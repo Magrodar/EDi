@@ -134,6 +134,27 @@ textarea, input[type="text"], input[type="password"], input[type="number"], inpu
 .btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
 .btn.small { padding: 5px 10px; font-size: 12px; }
 
+.debrief-input-row { display: flex; gap: 10px; align-items: stretch; }
+.debrief-input-row textarea { flex: 1; margin-bottom: 0; }
+.btn.mic {
+  flex-shrink: 0;
+  width: 52px;
+  font-size: 20px;
+  padding: 0;
+  border-radius: 999px;
+}
+.btn.mic.recording {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+  animation: mic-pulse 1.2s ease-in-out infinite;
+}
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,91,106,0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(255,91,106,0); }
+}
+.mic-status { margin: 8px 0 0; }
+
 .quick-add {
   display: flex;
   gap: 8px;

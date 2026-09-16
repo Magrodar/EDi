@@ -46,8 +46,12 @@
 
     <section id="tab-debrief" class="tab panel hidden">
       <h2>Debrief</h2>
-      <p class="hint">Typed push-to-talk debrief. EDI extracts facts, commitments and risks and runs the what-am-I-missing scan.</p>
-      <textarea id="debriefText" rows="6" placeholder="I'll send the RM-X purchase order by tomorrow. There is a risk that RM-X may miss the weekly plan..."></textarea>
+      <p class="hint">Push-to-talk or typed debrief. EDI extracts facts, commitments and risks and runs the what-am-I-missing scan. Voice only transcribes between the tap that starts it and the tap that stops it — nothing before, nothing after.</p>
+      <div class="debrief-input-row">
+        <textarea id="debriefText" rows="6" placeholder="I'll send the RM-X purchase order by tomorrow. There is a risk that RM-X may miss the weekly plan..."></textarea>
+        <button id="micButton" class="btn mic" type="button" title="Tap to talk, tap again to stop">🎤</button>
+      </div>
+      <p id="micStatus" class="hint mic-status hidden">Listening… tap the mic again to stop</p>
       <button id="submitDebrief" class="btn primary">Submit debrief</button>
       <div id="debriefResult"></div>
     </section>
